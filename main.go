@@ -1,10 +1,9 @@
 package main
 
 import (
-    "github.com/vazanoir/pokedexcli/repl"
+	"github.com/vazanoir/pokedexcli/repl"
 )
 
 func main() {
-    repl.Repl()
+	repl.Repl()
 }
-
