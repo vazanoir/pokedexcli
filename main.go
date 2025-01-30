@@ -1,10 +1,10 @@
 package main
 
 import (
-    "fmt"
+    "github.com/vazanoir/pokedexcli/repl"
 )
 
 func main() {
-    fmt.Println("Hello, World!")
+    repl.Repl()
 }
 
