@@ -7,11 +7,6 @@ import (
 	"net/http"
 )
 
-type Location struct {
-	Name string
-	Url  string
-}
-
 type LocationPage struct {
 	Count    int    `json:"count"`
 	Next     string `json:"next"`
