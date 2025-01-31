@@ -7,7 +7,15 @@ import (
 	"strings"
 )
 
+type Config struct {
+	Prev string
+	Next string
+}
+
 func Repl() {
+	cfg := Config{
+		Next: "https://pokeapi.co/api/v2/location-area",
+	}
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
@@ -26,7 +34,7 @@ func Repl() {
 			continue
 		}
 
-		err := cmd.callback()
+		err := cmd.callback(&cfg)
 		if err != nil {
 			fmt.Printf("error using %s's callback: %v", cmd.name, err)
 		}
