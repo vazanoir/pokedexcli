@@ -23,26 +23,26 @@ var c cache.Cache = cache.NewCache(7 * time.Second)
 
 func GetLocations(url string) (LocationPage, error) {
 	if body, found := c.Get(url); found {
-        page := LocationPage{}
-        if err := json.Unmarshal(body, &page); err != nil {
-            return LocationPage{}, err
-        }
-        return page, nil
-    }
+		page := LocationPage{}
+		if err := json.Unmarshal(body, &page); err != nil {
+			return LocationPage{}, err
+		}
+		return page, nil
+	}
 
-    res, err := http.Get(url)
-    if err != nil {
-        return LocationPage{}, err
-    }
+	res, err := http.Get(url)
+	if err != nil {
+		return LocationPage{}, err
+	}
 
-    body, err := io.ReadAll(res.Body)
-    res.Body.Close()
-    if res.StatusCode > 299 {
-        return LocationPage{}, fmt.Errorf("bad status code: %v", res.StatusCode)
-    }
-    if err != nil {
-        return LocationPage{}, err
-    }
+	body, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	if res.StatusCode > 299 {
+		return LocationPage{}, fmt.Errorf("bad status code: %v", res.StatusCode)
+	}
+	if err != nil {
+		return LocationPage{}, err
+	}
 
 	page := LocationPage{}
 	if err := json.Unmarshal(body, &page); err != nil {
