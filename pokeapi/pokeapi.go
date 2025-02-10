@@ -30,7 +30,6 @@ func GetLocations(url string) (LocationPage, error) {
         return page, nil
     }
 
-    fmt.Printf("INFO: cache not used for '%v'\n", url)
     res, err := http.Get(url)
     if err != nil {
         return LocationPage{}, err
