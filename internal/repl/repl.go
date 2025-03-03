@@ -34,7 +34,12 @@ func StartRepl(cfg *Config) {
 			continue
 		}
 
-		err := cmd.Callback(cfg)
+		args := []string{}
+		if len(words) > 1 {
+			args = words[1:]
+		}
+
+		err := cmd.Callback(cfg, args...)
 		if err != nil {
 			fmt.Printf("error using %s's callback: %v", cmd.Name, err)
 		}
