@@ -1,12 +1,9 @@
-package pokeapi
+package client
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/vazanoir/pokedexcli/cache"
 	"io"
-	"net/http"
-	"time"
 )
 
 type LocationPage struct {
@@ -19,10 +16,8 @@ type LocationPage struct {
 	} `json:"results"`
 }
 
-var c cache.Cache = cache.NewCache(7 * time.Second)
-
-func GetLocations(url string) (LocationPage, error) {
-	if body, found := c.Get(url); found {
+func (c *Client) GetLocations(url string) (LocationPage, error) {
+	if body, found := c.cache.Get(url); found {
 		page := LocationPage{}
 		if err := json.Unmarshal(body, &page); err != nil {
 			return LocationPage{}, err
@@ -30,7 +25,7 @@ func GetLocations(url string) (LocationPage, error) {
 		return page, nil
 	}
 
-	res, err := http.Get(url)
+	res, err := c.httpClient.Get(url)
 	if err != nil {
 		return LocationPage{}, err
 	}
@@ -49,7 +44,7 @@ func GetLocations(url string) (LocationPage, error) {
 		return LocationPage{}, err
 	}
 
-	c.Add(url, body)
+	c.cache.Add(url, body)
 
 	return page, nil
 }

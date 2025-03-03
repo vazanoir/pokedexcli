@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/vazanoir/pokedexcli/internal/client"
 )
 
 type Config struct {
-	Prev string
-	Next string
+	Client client.Client
+	Prev   string
+	Next   string
 }
 
-func Repl() {
-	cfg := Config{
-		Next: "https://pokeapi.co/api/v2/location-area",
-	}
+func StartRepl(cfg *Config) {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
@@ -28,15 +28,15 @@ func Repl() {
 			continue
 		}
 
-		cmd, found := getCommands()[words[0]]
+		cmd, found := GetCommands()[words[0]]
 		if !found {
 			fmt.Println("Unknown command")
 			continue
 		}
 
-		err := cmd.callback(&cfg)
+		err := cmd.Callback(cfg)
 		if err != nil {
-			fmt.Printf("error using %s's callback: %v", cmd.name, err)
+			fmt.Printf("error using %s's callback: %v", cmd.Name, err)
 		}
 	}
 }
