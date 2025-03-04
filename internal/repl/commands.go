@@ -13,7 +13,7 @@ type cliCommand struct {
 	Callback func(*Config, ...string) error
 }
 
-func GetCommands() map[string]cliCommand {
+func InitCommands() map[string]cliCommand {
 	return map[string]cliCommand{
 		"help": {
 			Name: "help",
@@ -21,7 +21,16 @@ func GetCommands() map[string]cliCommand {
 			Callback: func(cfg *Config, args ...string) error {
 				fmt.Printf("Welcome to the Pokedex!\nUsage:\n\n")
 
-				for _, cmd := range GetCommands() {
+				commandsOrder := []string{
+					"help",
+					"exit",
+					"map",
+					"mapb",
+					"explore",
+				}
+
+				for _, cmdName := range commandsOrder {
+					cmd := cfg.Commands[cmdName]
 					fmt.Printf("%s: %s\n", cmd.Name, cmd.Desc)
 				}
 

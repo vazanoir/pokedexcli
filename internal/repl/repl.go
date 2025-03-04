@@ -11,11 +11,13 @@ import (
 
 type Config struct {
 	Client client.Client
+	Commands map[string]cliCommand
 	Prev   string
 	Next   string
 }
 
 func StartRepl(cfg *Config) {
+	cfg.Commands = InitCommands()
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
@@ -28,7 +30,7 @@ func StartRepl(cfg *Config) {
 			continue
 		}
 
-		cmd, found := GetCommands()[words[0]]
+		cmd, found := cfg.Commands[words[0]]
 		if !found {
 			fmt.Println("Unknown command")
 			continue
