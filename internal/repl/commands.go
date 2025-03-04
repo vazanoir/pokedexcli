@@ -33,6 +33,7 @@ func InitCommands() map[string]cliCommand {
 					"explore",
 					"catch",
 					"inspect",
+					"pokedex",
 				}
 
 				for _, cmdName := range commandsOrder {
@@ -206,6 +207,21 @@ func InitCommands() map[string]cliCommand {
 					fmt.Printf(" - %v\n", t.Type.Name)
 				}
 
+				return nil
+			},
+		},
+		"pokedex": {
+			Name: "pokedex",
+			Desc: "Show all the Pokemon you caught!",
+			Callback: func(cfg *Config, args ...string) error {
+				if len(cfg.Pokedex) < 1 {
+					fmt.Println("You didn't catch anything!")
+				}
+
+				fmt.Println("Your Pokedex:")
+				for pokemon := range cfg.Pokedex {
+					fmt.Printf(" - %v\n", pokemon)
+				}
 				return nil
 			},
 		},
