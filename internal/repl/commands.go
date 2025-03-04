@@ -32,6 +32,7 @@ func InitCommands() map[string]cliCommand {
 					"mapb",
 					"explore",
 					"catch",
+					"inspect",
 				}
 
 				for _, cmdName := range commandsOrder {
@@ -172,6 +173,37 @@ func InitCommands() map[string]cliCommand {
 					fmt.Printf("%v catched!\n", cases.Title(language.English, cases.NoLower).String(pokemon.Name))
 				} else {
 					fmt.Printf("%v escaped!\n", cases.Title(language.English, cases.NoLower).String(pokemon.Name))
+				}
+
+				return nil
+			},
+		},
+		"inspect": {
+			Name: "inspect",
+			Desc: "Inspect a Pokemon from your Pokedex.",
+			Callback: func(cfg *Config, args ...string) error {
+				if len(args) != 1 {
+					fmt.Printf("Input one pokemon name that you caught.\n")
+					return nil
+				}
+				arg := args[0]
+
+				pokemon, found := cfg.Pokedex[arg]
+				if !found {
+					fmt.Printf("You don't have %v in your Pokedex!\n", arg)
+					return nil
+				}
+
+				fmt.Printf("Name: %v\n", pokemon.Name)
+				fmt.Printf("Height: %v\n", pokemon.Height)
+				fmt.Printf("Weight: %v\n", pokemon.Weight)
+				fmt.Printf("Stats:\n")
+				for _, s := range pokemon.Stats {
+					fmt.Printf(" - %v: %v\n", s.Stat.Name, s.BaseStat)
+				}
+				fmt.Printf("Types:\n")
+				for _, t := range pokemon.Types {
+					fmt.Printf(" - %v\n", t.Type.Name)
 				}
 
 				return nil
