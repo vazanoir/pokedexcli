@@ -12,12 +12,15 @@ import (
 type Config struct {
 	Client client.Client
 	Commands map[string]cliCommand
+	Pokedex map[string]client.Pokemon
 	Prev   string
 	Next   string
 }
 
 func StartRepl(cfg *Config) {
 	cfg.Commands = InitCommands()
+	cfg.Pokedex = make(map[string]client.Pokemon)
+
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {

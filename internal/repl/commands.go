@@ -2,9 +2,13 @@ package repl
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"os"
 	"strconv"
 	"strings"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type cliCommand struct {
@@ -27,6 +31,7 @@ func InitCommands() map[string]cliCommand {
 					"map",
 					"mapb",
 					"explore",
+					"catch",
 				}
 
 				for _, cmdName := range commandsOrder {
@@ -123,6 +128,50 @@ func InitCommands() map[string]cliCommand {
 				fmt.Printf("Found Pokemon:\n")
 				for _, poke := range loc.PokemonEncounters {
 					fmt.Printf(" - %v\n", poke.Pokemon.Name)
+				}
+
+				return nil
+			},
+		},
+		"catch": {
+			Name: "catch",
+			Desc: "Try to catch a pokemon!",
+			Callback: func(cfg *Config, args ...string) error {
+				if len(args) != 1 {
+					fmt.Printf("Input one pokemon name, use explore to find some.\n")
+					return nil
+				}
+				arg := args[0]
+
+				pokemon, err := cfg.Client.CatchPokemon("https://pokeapi.co/api/v2/pokemon/" + arg)
+				if err != nil {
+					errParts := strings.Split(err.Error(), " ")
+					errCode, err := strconv.Atoi(errParts[len(errParts)-1])
+					if err != nil {
+						return err
+					}
+
+					switch errCode {
+					case 404:
+						fmt.Printf("Pokemon %v not found. Use explore to find valid ones.\n", arg)
+					default:
+						return err
+					}
+
+					return nil
+				}
+
+				fmt.Printf("Throwing a Pokeball at %v...\n", pokemon.Name)
+				// max BaseExperience can be 635
+				maxThrow := 650
+				throw := rand.IntN(maxThrow)
+				chance := (1 - float64(pokemon.BaseExperience) / float64(maxThrow)) * 100
+				fmt.Printf("%.0f%% chance of capturing %v!\n", chance, pokemon.Name)
+				if throw > pokemon.BaseExperience {
+					cfg.Pokedex[pokemon.Name] = pokemon
+					fmt.Printf("%v catched!\n", cases.Title(language.English, cases.NoLower).String(pokemon.Name))
+				} else {
+					fmt.Printf("%v escaped!\n", cases.Title(language.English, cases.NoLower).String(pokemon.Name))
 				}
 
 				return nil
