@@ -10,11 +10,11 @@ import (
 )
 
 type Config struct {
-	Client client.Client
+	Client   client.Client
 	Commands map[string]cliCommand
-	Pokedex map[string]client.Pokemon
-	Prev   string
-	Next   string
+	Pokedex  map[string]client.Pokemon
+	Prev     string
+	Next     string
 }
 
 func StartRepl(cfg *Config) {

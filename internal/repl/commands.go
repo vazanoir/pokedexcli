@@ -167,7 +167,7 @@ func InitCommands() map[string]cliCommand {
 				// max BaseExperience can be 635
 				maxThrow := 650
 				throw := rand.IntN(maxThrow)
-				chance := (1 - float64(pokemon.BaseExperience) / float64(maxThrow)) * 100
+				chance := (1 - float64(pokemon.BaseExperience)/float64(maxThrow)) * 100
 				fmt.Printf("%.0f%% chance of capturing %v!\n", chance, pokemon.Name)
 				if throw > pokemon.BaseExperience {
 					cfg.Pokedex[pokemon.Name] = pokemon

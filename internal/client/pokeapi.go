@@ -94,8 +94,8 @@ func (c *Client) ExploreLocations(url string) (ExploreResult, error) {
 type Pokemon struct {
 	BaseExperience int    `json:"base_experience"`
 	Name           string `json:"name"`
-	Weight int `json:"weight"`
-	Height    int `json:"height"`
+	Weight         int    `json:"weight"`
+	Height         int    `json:"height"`
 	Stats          []struct {
 		BaseStat int `json:"base_stat"`
 		Effort   int `json:"effort"`
